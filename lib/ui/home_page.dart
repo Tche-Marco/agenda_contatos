@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:agenda_contatos/ui/contact_page.dart';
-import 'package:flutter/material.dart';
-
 import '../helpers/contact_helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -122,6 +122,11 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(10),
                     child: myTextButton(
                       text: 'Ligar',
+                      onPress: () {
+                        Uri url = Uri.parse('tel:${contacts[index].phone}');
+                        launchUrl(url);
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                   Padding(
