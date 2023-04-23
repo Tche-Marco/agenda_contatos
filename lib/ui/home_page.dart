@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../helpers/contact_helper.dart';
@@ -42,8 +44,61 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(10),
         itemCount: contacts.length,
         itemBuilder: (context, index) {
-
+          return _contactCard(context, index);
         },
+      ),
+    );
+  }
+
+  Widget _contactCard(BuildContext context, int index) {
+    return GestureDetector(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: contacts[index].img == null
+                        ? const AssetImage("images/image.png")
+                        : FileImage(File(contacts[index].img as String))
+                            as ImageProvider<Object>,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      contacts[index].name ?? '',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      contacts[index].email ?? '',
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),Text(
+                      contacts[index].phone ?? '',
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
