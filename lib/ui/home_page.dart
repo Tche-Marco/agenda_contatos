@@ -71,24 +71,24 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      contacts[index].name ?? '',
+                      contacts[index].name,
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      contacts[index].email ?? '',
+                      contacts[index].email ?? 'e-mail não informado',
                       style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),Text(
-                      contacts[index].phone ?? '',
+                      contacts[index].phone,
                       style: const TextStyle(
                         fontSize: 18,
                       ),
