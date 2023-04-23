@@ -101,7 +101,57 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onTap: () {
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
+      },
+    );
+  }
+
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: myTextButton(
+                      text: 'Ligar',
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: myTextButton(
+                      text: 'Editar',
+                      onPress: () {
+                        Navigator.pop(context);
+                        _showContactPage(contact: contacts[index]);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: myTextButton(
+                      text: 'Excluir',
+                      onPress: () {
+                        helper.deleteContact(contacts[index].id as int);
+                        setState(() {
+                          contacts.removeAt(index);
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -131,5 +181,19 @@ class _HomePageState extends State<HomePage> {
         contacts = list as List<Contact>;
       });
     });
+  }
+
+  Widget myTextButton({required String text, void Function()? onPress}) {
+    onPress ??= () {};
+    return TextButton(
+      onPressed: onPress,
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.red,
+          fontSize: 20,
+        ),
+      ),
+    );
   }
 }
