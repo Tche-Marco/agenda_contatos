@@ -5,6 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:agenda_contatos/ui/contact_page.dart';
 import '../helpers/contact_helper.dart';
 
+enum OrderOptions { orderaz, orderza }
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -30,6 +32,21 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Contatos'),
         backgroundColor: Colors.red,
         centerTitle: true,
+        actions: [
+          PopupMenuButton<OrderOptions>(
+            itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+              const PopupMenuItem<OrderOptions>(
+                value: OrderOptions.orderaz,
+                child: Text('Ordenar de A-Z'),
+              ),
+              const PopupMenuItem<OrderOptions>(
+                value: OrderOptions.orderza,
+                child: Text('Ordenar de Z-A'),
+              ),
+            ],
+            onSelected: _orderList,
+          )
+        ],
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
@@ -66,6 +83,7 @@ class _HomePageState extends State<HomePage> {
                         ? const AssetImage("images/image.png")
                         : FileImage(File(contacts[index].img as String))
                             as ImageProvider<Object>,
+                      fit: BoxFit.cover
                   ),
                 ),
               ),
@@ -122,6 +140,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(10),
                     child: myTextButton(
                       text: 'Ligar',
+                      color: Colors.redAccent,
                       onPress: () {
                         Uri url = Uri.parse('tel:${contacts[index].phone}');
                         launchUrl(url);
@@ -133,6 +152,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(10),
                     child: myTextButton(
                       text: 'Editar',
+                      color: Colors.redAccent,
                       onPress: () {
                         Navigator.pop(context);
                         _showContactPage(contact: contacts[index]);
@@ -188,17 +208,34 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget myTextButton({required String text, void Function()? onPress}) {
+  Widget myTextButton({required String text, void Function()? onPress, Color? color}) {
     onPress ??= () {};
+    color ??= Colors.red;
     return TextButton(
       onPressed: onPress,
       child: Text(
         text,
-        style: const TextStyle(
-          color: Colors.red,
+        style: TextStyle(
+          color: color,
           fontSize: 20,
         ),
       ),
     );
+  }
+
+  void _orderList(OrderOptions result) {
+    switch (result) {
+      case OrderOptions.orderaz:
+        contacts.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        break;
+      case OrderOptions.orderza:
+        contacts.sort((a, b) {
+          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+        });
+        break;
+    }
+    setState(() {});
   }
 }
